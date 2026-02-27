@@ -1,6 +1,7 @@
 import { PROMPT_TEMPLATES, STATUS_MESSAGES, CACHED_FALLBACK } from './prompts.js';
 import { streamChat } from './api.js';
 import { showStatus, clearPanel, appendText, showConfirmation } from './output-panel.js';
+import { playTone } from './sounds.js';
 
 let activeController = null;
 
@@ -18,6 +19,7 @@ export function dispatch(gestureName, code = '') {
       activeController = null;
     }
     showStatus(STATUS_MESSAGES.stop);
+    playTone('abort');
     return;
   }
 

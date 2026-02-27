@@ -12,14 +12,26 @@
     <div id="top-bar">
       <div id="camera-wrap">
         <video id="camera" autoplay playsinline muted></video>
-        <canvas id="landmark-canvas"></canvas>
         <div id="gesture-label"></div>
       </div>
       <div id="gesture-indicator"></div>
     </div>
 
     <!-- Output panel — streams Claude responses -->
-    <div id="output-panel"></div>
+    <div id="output-panel">
+      <div id="onboarding">
+        <div class="onboarding-icon">👋</div>
+        <h2>Hold up a hand sign to begin</h2>
+        <div class="onboarding-gestures">
+          <span>👎 Fix</span>
+          <span>☝️ Explain</span>
+          <span>✊ Commit</span>
+          <span>✌️ Test</span>
+          <span>✋ Stop</span>
+        </div>
+        <p class="onboarding-hint">or press <kbd>1</kbd>–<kbd>4</kbd> on your keyboard</p>
+      </div>
+    </div>
 
     <!-- Legend bar -->
     <div id="legend-bar">
@@ -33,6 +45,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.3/lib/p5.min.js"></script>
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

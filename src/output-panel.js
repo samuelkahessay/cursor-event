@@ -28,9 +28,16 @@ export function showStatus(msg) {
   el.textContent = msg;
 }
 
-/** Clear all panel content. */
+/** Clear all panel content (hides onboarding if present). */
 export function clearPanel() {
-  panel.innerHTML = '';
+  const onboarding = panel.querySelector('#onboarding');
+  if (onboarding) {
+    onboarding.classList.add('hidden');
+  }
+  // Remove everything except a fading onboarding overlay
+  Array.from(panel.children).forEach(child => {
+    if (child.id !== 'onboarding') child.remove();
+  });
 }
 
 /** Append a text chunk to the streaming content area. */

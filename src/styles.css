@@ -33,13 +33,22 @@ body {
   height: 150px;
 }
 
-#camera,
-#landmark-canvas {
+#camera {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 6px;
+}
+
+/* p5.js creates a <canvas> inside #camera-wrap — fill the container */
+#camera-wrap canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
   border-radius: 6px;
 }
 
@@ -118,6 +127,85 @@ body {
   font-style: italic;
   text-align: center;
   margin-top: 40%;
+}
+
+/* ── Onboarding Overlay ── */
+
+#onboarding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  animation: fade-in 0.5s ease-out;
+}
+
+#onboarding.hidden {
+  animation: fade-out 0.4s ease-out forwards;
+  pointer-events: none;
+}
+
+#onboarding .onboarding-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  animation: wave 1.5s ease-in-out infinite;
+}
+
+#onboarding h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #e6edf3;
+  margin-bottom: 20px;
+}
+
+#onboarding .onboarding-gestures {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 15px;
+  color: #8b949e;
+}
+
+#onboarding .onboarding-gestures span {
+  padding: 6px 12px;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+}
+
+#onboarding .onboarding-hint {
+  font-size: 13px;
+  color: #484f58;
+}
+
+#onboarding .onboarding-hint kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  font-size: 12px;
+  font-family: monospace;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  color: #c9d1d9;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  75% { transform: rotate(-15deg); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 /* ── Legend Bar ── */
