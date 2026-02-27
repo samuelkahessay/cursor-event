@@ -16,21 +16,36 @@ body {
   flex-direction: column;
   height: 100vh;
   padding: 16px;
+  gap: 12px;
 }
 
-/* ── Top Bar: Camera + Gesture Indicator ── */
+/* ── Main Row: Camera left, Output right ── */
 
-#top-bar {
+#main-row {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
+  flex: 1;
+  gap: 16px;
+  min-height: 0;
+}
+
+#camera-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 40%;
+  min-width: 280px;
+  max-width: 480px;
 }
 
 #camera-wrap {
   position: relative;
-  width: 200px;
-  height: 150px;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #161b22;
+  border: 1px solid #30363d;
 }
 
 #camera {
@@ -69,6 +84,7 @@ body {
   color: #a3e635;
   opacity: 0;
   transition: opacity 0.15s;
+  text-align: center;
 }
 
 #gesture-indicator.flash {
@@ -80,7 +96,7 @@ body {
   100% { opacity: 0; transform: scale(1); }
 }
 
-/* ── Output Panel ── */
+/* ── Output Panel (right side) ── */
 
 #output-panel {
   flex: 1;
@@ -90,6 +106,7 @@ body {
   padding: 20px;
   overflow-y: auto;
   position: relative;
+  min-width: 0;
 }
 
 #output-panel .status {
@@ -146,9 +163,15 @@ body {
   pointer-events: none;
 }
 
+#onboarding .onboarding-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
 #onboarding .onboarding-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
+  font-size: 40px;
   animation: wave 1.5s ease-in-out infinite;
 }
 
@@ -156,7 +179,122 @@ body {
   font-size: 20px;
   font-weight: 600;
   color: #e6edf3;
-  margin-bottom: 20px;
+  margin-bottom: 4px;
+}
+
+#onboarding .onboarding-sub {
+  font-size: 14px;
+  color: #8b949e;
+}
+
+/* ── Demo Code Block ── */
+
+.demo-code-block {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #30363d;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.demo-code-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #21262d;
+  font-size: 12px;
+  color: #8b949e;
+}
+
+.demo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.demo-dot.red    { background: #f85149; }
+.demo-dot.yellow { background: #d29922; }
+.demo-dot.green  { background: #3fb950; }
+
+.demo-filename {
+  margin-left: 6px;
+  flex: 1;
+}
+
+.demo-copy-btn {
+  background: #30363d;
+  border: 1px solid #484f58;
+  border-radius: 4px;
+  color: #c9d1d9;
+  font-size: 11px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+.demo-copy-btn:hover {
+  background: #484f58;
+}
+
+.demo-snippet {
+  padding: 14px 16px;
+  background: #0d1117;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c9d1d9;
+  overflow-x: auto;
+  margin: 0;
+}
+
+/* ── Onboarding Action Cards ── */
+
+.onboarding-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.onboarding-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 13px;
+  color: #c9d1d9;
+}
+
+.onboarding-action kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-family: monospace;
+  background: #0d1117;
+  border: 1px solid #484f58;
+  border-radius: 4px;
+  color: #8b949e;
+  min-width: 22px;
+  text-align: center;
+}
+
+.onboarding-action .action-emoji {
+  font-size: 18px;
+}
+
+.onboarding-action strong {
+  color: #e6edf3;
+}
+
+.onboarding-action .action-desc {
+  display: block;
+  font-size: 11px;
+  color: #8b949e;
 }
 
 #onboarding .onboarding-gestures {
