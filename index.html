@@ -8,15 +8,31 @@
 </head>
 <body>
   <div id="app">
-    <header id="gesture-legend">
-      <span class="legend-item"><kbd>1</kbd> ✌️ Fix</span>
-      <span class="legend-item"><kbd>2</kbd> 👍 Explain</span>
-      <span class="legend-item"><kbd>3</kbd> 🤙 Commit</span>
-      <span class="legend-item"><kbd>4</kbd> 🤘 Test</span>
-      <span class="legend-item"><kbd>0</kbd> ✋ Stop</span>
-    </header>
+    <!-- Top row: camera feed + gesture indicator -->
+    <div id="top-bar">
+      <div id="camera-wrap">
+        <video id="camera" autoplay playsinline muted></video>
+        <canvas id="landmark-canvas"></canvas>
+        <div id="gesture-label"></div>
+      </div>
+      <div id="gesture-indicator"></div>
+    </div>
+
+    <!-- Output panel — streams Claude responses -->
     <div id="output-panel"></div>
+
+    <!-- Legend bar -->
+    <div id="legend-bar">
+      <span><kbd>1</kbd> 👎 fix</span>
+      <span><kbd>2</kbd> ☝️ explain</span>
+      <span><kbd>3</kbd> ✊ commit</span>
+      <span><kbd>4</kbd> ✌️ test</span>
+      <span><kbd>0</kbd> ✋ stop</span>
+    </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

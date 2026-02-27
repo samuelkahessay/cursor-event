@@ -1,16 +1,25 @@
 import './styles.css';
+import { startCamera } from './camera.js';
+import { initHands } from './mediapipe.js';
+import { processFrame, onGestureDetected } from './gestures.js';
+import { showGestureFeedback } from './ui.js';
 import { dispatch } from './dispatcher.js';
 import { FALLBACK_CODE } from './prompts.js';
 
-/**
- * Debug keyboard shortcuts — only active in development.
- *
- *   1 → fix      (✌️ Peace)
- *   2 → explain  (👍 Thumbs up)
- *   3 → commit   (🤙 Hang loose)
- *   4 → test     (🤘 Rock on)
- *   0 → stop     (✋ Open palm)
- */
+// ── Camera + gesture detection (Bishesh) ──
+
+const video = document.getElementById('camera');
+
+onGestureDetected((gestureName) => {
+  showGestureFeedback(gestureName);
+});
+
+startCamera(video).then(() => {
+  initHands(video, processFrame);
+});
+
+// ── Keyboard debug shortcuts (Sam) — DEV only ──
+
 if (import.meta.env.DEV) {
   const KEY_MAP = {
     '1': 'fix',
@@ -21,13 +30,11 @@ if (import.meta.env.DEV) {
   };
 
   document.addEventListener('keydown', async (e) => {
-    // Ignore if user is typing in an input/textarea
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
     const gesture = KEY_MAP[e.key];
     if (!gesture) return;
 
-    // For action gestures, try to read clipboard; fall back to demo code
     let code = '';
     if (gesture !== 'open_palm') {
       try {

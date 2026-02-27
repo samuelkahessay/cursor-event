@@ -18,34 +18,57 @@ body {
   padding: 16px;
 }
 
-/* ── Gesture Legend Bar ── */
+/* ── Top Bar: Camera + Gesture Indicator ── */
 
-#gesture-legend {
+#top-bar {
   display: flex;
-  gap: 16px;
-  padding: 12px 16px;
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 8px;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 16px;
-  flex-wrap: wrap;
 }
 
-.legend-item {
-  font-size: 14px;
-  color: #8b949e;
+#camera-wrap {
+  position: relative;
+  width: 200px;
+  height: 150px;
 }
 
-.legend-item kbd {
-  display: inline-block;
-  padding: 2px 6px;
+#camera,
+#landmark-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+}
+
+#gesture-label {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
   font-size: 12px;
-  font-family: monospace;
-  background: #21262d;
-  border: 1px solid #30363d;
+  padding: 2px 6px;
   border-radius: 4px;
-  color: #c9d1d9;
-  margin-right: 4px;
+}
+
+#gesture-indicator {
+  font-size: 20px;
+  font-weight: bold;
+  color: #a3e635;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+#gesture-indicator.flash {
+  animation: flash-in 0.8s ease-out forwards;
+}
+
+@keyframes flash-in {
+  0%   { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(1); }
 }
 
 /* ── Output Panel ── */
@@ -95,4 +118,28 @@ body {
   font-style: italic;
   text-align: center;
   margin-top: 40%;
+}
+
+/* ── Legend Bar ── */
+
+#legend-bar {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  padding: 10px;
+  border-top: 1px solid #30363d;
+  font-size: 13px;
+  color: #8b949e;
+}
+
+#legend-bar kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-family: monospace;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  color: #c9d1d9;
+  margin-right: 4px;
 }
