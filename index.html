@@ -3,15 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GestureDispatch</title>
+  <title>Gesture Dispatch</title>
   <link rel="stylesheet" href="/src/styles.css" />
 </head>
 <body>
   <div id="app">
     <!-- Main content: left column stacked, output right -->
     <div id="main-row">
-      <!-- Left: code snippet, camera, activity log -->
+      <!-- Left: camera, code snippet, activity log -->
       <div id="left-column">
+        <!-- Camera feed -->
+        <div id="camera-panel">
+          <div id="camera-wrap">
+            <video id="camera" autoplay playsinline muted></video>
+            <div id="gesture-label"></div>
+          </div>
+          <div id="gesture-indicator"></div>
+        </div>
+
         <!-- Code snippet (always visible) -->
         <div id="code-snippet-panel">
           <div class="demo-code-titlebar">
@@ -22,15 +31,6 @@
             <button class="demo-copy-btn" id="copy-demo-btn">Copy</button>
           </div>
           <pre class="demo-snippet" id="demo-snippet"></pre>
-        </div>
-
-        <!-- Camera feed -->
-        <div id="camera-panel">
-          <div id="camera-wrap">
-            <video id="camera" autoplay playsinline muted></video>
-            <div id="gesture-label"></div>
-          </div>
-          <div id="gesture-indicator"></div>
         </div>
 
         <!-- Activity log -->

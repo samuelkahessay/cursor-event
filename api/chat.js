@@ -52,7 +52,7 @@ export default async function handler(req) {
       'X-Title': 'GestureDispatch',
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-sonnet-4',
+      model: 'google/gemini-2.5-flash',
       max_tokens: 1024,
       stream: true,
       messages: [{ role: 'user', content: prompt }],
