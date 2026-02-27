@@ -1,9 +1,7 @@
-import Anthropic from '@anthropic-ai/sdk';
-
 /**
- * Vite plugin that proxies POST /api/chat → Claude API and streams the
+ * Vite plugin that proxies POST /api/chat → OpenRouter API and streams the
  * response back as Server-Sent Events. The API key is read from
- * process.env.ANTHROPIC_API_KEY (never exposed to the browser).
+ * process.env.OPENROUTER_API_KEY (never exposed to the browser).
  */
 export default function claudeProxy() {
   return {
@@ -34,18 +32,19 @@ export default function claudeProxy() {
         }
 
         // ── Validate API key ──
-        if (!process.env.ANTHROPIC_API_KEY) {
+        const apiKey = process.env.OPENROUTER_API_KEY;
+        if (!apiKey) {
           res.writeHead(500, { 'Content-Type': 'application/json' });
           res.end(
             JSON.stringify({
               error:
-                'ANTHROPIC_API_KEY not set. Copy .env.example to .env and add your key.',
+                'OPENROUTER_API_KEY not set. Copy .env.example to .env and add your key.',
             }),
           );
           return;
         }
 
-        // ── Stream from Claude API ──
+        // ── Stream from OpenRouter API ──
         res.writeHead(200, {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
@@ -53,28 +52,62 @@ export default function claudeProxy() {
         });
 
         try {
-          const client = new Anthropic();
-
-          const stream = client.messages.stream({
-            model: 'claude-sonnet-4-6',
-            max_tokens: 1024,
-            messages: [{ role: 'user', content: prompt }],
+          const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': 'https://gesturedispatch.dev',
+              'X-Title': 'GestureDispatch',
+            },
+            body: JSON.stringify({
+              model: 'anthropic/claude-sonnet-4',
+              max_tokens: 1024,
+              stream: true,
+              messages: [{ role: 'user', content: prompt }],
+            }),
           });
 
-          for await (const event of stream) {
-            if (
-              event.type === 'content_block_delta' &&
-              event.delta.type === 'text_delta'
-            ) {
-              const data = JSON.stringify({ text: event.delta.text });
-              res.write(`data: ${data}\n\n`);
+          if (!response.ok) {
+            const err = await response.text();
+            throw new Error(`OpenRouter ${response.status}: ${err}`);
+          }
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop();
+
+            for (const line of lines) {
+              const trimmed = line.trim();
+              if (!trimmed || !trimmed.startsWith('data: ')) continue;
+
+              const payload = trimmed.slice(6);
+              if (payload === '[DONE]') continue;
+
+              try {
+                const event = JSON.parse(payload);
+                const text = event.choices?.[0]?.delta?.content;
+                if (text) {
+                  res.write(`data: ${JSON.stringify({ text })}\n\n`);
+                }
+              } catch {
+                // incomplete JSON chunk, skip
+              }
             }
           }
 
           res.write('data: [DONE]\n\n');
         } catch (err) {
           const errorMsg = JSON.stringify({
-            error: err.message || 'Claude API error',
+            error: err.message || 'OpenRouter API error',
           });
           res.write(`data: ${errorMsg}\n\n`);
         }

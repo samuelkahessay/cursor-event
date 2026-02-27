@@ -18,7 +18,8 @@ GestureDispatch is a hackathon project: AI-powered code snippets triggered by ha
 | Bundler | Vite (vanilla JS template) |
 | Language | Vanilla JS — no TypeScript |
 | Hand Detection | MediaPipe Hands via CDN |
-| AI | Claude API (claude-sonnet-4-6) via raw `fetch()` with SSE streaming |
+| AI | Claude via OpenRouter (`anthropic/claude-sonnet-4`) — Vite proxy streams SSE to browser |
+| Visualization | p5.js via CDN (instance mode) — stylized hand landmark rendering |
 | UI | Single HTML page + CSS — no framework |
 | Context | Clipboard API (`navigator.clipboard`) |
 
@@ -32,10 +33,11 @@ gesture-dispatch/
 │   ├── main.js             ← entry: camera init, MediaPipe setup, gesture loop, keyboard fallback
 │   ├── gestures.js         ← landmark → gesture classifier (5 gestures)
 │   ├── dispatcher.js       ← dispatch(gesture, code) → Claude API → stream → clipboard
+│   ├── handviz.js          ← p5.js sketch: hand skeleton, confidence ring, particles
 │   ├── sounds.js           ← Web Audio API tone generator for gesture feedback
 │   └── history.js          ← session history storage and rendering
 ├── vite.config.js          ← dev server config (API proxy if needed)
-├── .env                    ← ANTHROPIC_API_KEY (gitignored)
+├── .env                    ← OPENROUTER_API_KEY (gitignored)
 └── .env.example            ← template for env vars
 ```
 
@@ -43,7 +45,7 @@ gesture-dispatch/
 
 - **No frameworks.** Vanilla DOM manipulation only. `document.getElementById`, `classList`, `textContent`.
 - **No TypeScript.** Speed over safety for the hackathon.
-- **No npm dependencies beyond Vite.** MediaPipe loads from CDN. Claude API via raw `fetch()`.
+- **No npm dependencies beyond Vite.** MediaPipe and p5.js load from CDN. Claude API via raw `fetch()`.
 - **Single-page app.** Everything renders in `index.html`. No routing.
 - **Module pattern.** Each JS file exports functions. `main.js` wires them together.
 
@@ -91,17 +93,19 @@ open_palm()  → all five extended
 
 - **Core PRD:** `gesture-dispatch-prd.md`
 - **Expansions:** `prd-expansion.md`
+- **p5.js visualization:** `p5-hand-visualization.md`
 - **Bishesh's scope:** `bishesh-detection-ui.md`
 - **Sam's scope:** `sam-ai-pipeline.md`
 
 ### Expansion Features (beyond MVP)
 
-1. **Confidence ring** — radial SVG animation, 0.8s hold before dispatch (Bishesh)
-2. **Session history** — scrollable log of past dispatches with re-copy (Sam + Bishesh)
-3. **Keyboard fallback** — keys 1-5 map to gestures (Bishesh)
-4. **Onboarding overlay** — "hold up a hand to begin" first-load state (Bishesh)
-5. **Sound cues** — Web Audio API tones per gesture event (Bishesh)
-6. **Error handling UX** — inline error messages for camera/clipboard/API failures (Sam + Bishesh)
+1. **p5.js hand visualization** — stylized landmark skeleton replaces raw webcam feed (Bishesh)
+2. **Confidence ring** — drawn natively in p5 canvas, 0.8s hold before dispatch (Bishesh)
+3. **Particle burst** — landmarks explode on gesture confirmation, gesture-colored (Bishesh)
+4. **Session history** — scrollable log of past dispatches with re-copy (Sam + Bishesh)
+5. **Keyboard fallback** — keys 1-5 map to gestures (Bishesh)
+6. **Sound cues** — Web Audio API tones per gesture event (Bishesh)
+7. **Error handling UX** — inline error messages for camera/clipboard/API failures (Sam + Bishesh)
 
 ## Build & Run
 
@@ -110,7 +114,7 @@ npm install
 npm run dev        # starts Vite dev server
 ```
 
-Requires `ANTHROPIC_API_KEY` in `.env`.
+Requires `OPENROUTER_API_KEY` in `.env`.
 
 ## Demo Prep
 
@@ -125,5 +129,5 @@ Requires `ANTHROPIC_API_KEY` in `.env`.
 | Criterion | How We Address It |
 |-----------|------------------|
 | **Problem Statement** | Snippet analogy — judges have felt this pain. AI dispatch cost is too high. |
-| **Creativity** | Confidence ring, sound design, gesture-as-snippet concept. Multi-sensory UX. |
+| **Creativity** | p5.js hand visualization, particle bursts, confidence ring, sound design. Multi-sensory UX. |
 | **Completeness** | Full loop + history + error handling + keyboard fallback + onboarding. |
