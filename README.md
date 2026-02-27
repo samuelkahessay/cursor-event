@@ -1,4 +1,4 @@
-# GestureDispatch
+# 👋 GestureDispatch
 
 **Wave your hand at the webcam, get AI-powered code actions.** No typing, no buttons — just gestures.
 
@@ -38,6 +38,7 @@ npm run dev
 ## Team
 
 **Samuel Kahessay** — AI pipeline, streaming output, clipboard integration
+
 **Bishesh Khanal** — Hand detection, gesture classification, p5.js visualization, sound design
 
 ---
