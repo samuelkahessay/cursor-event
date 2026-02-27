@@ -19,6 +19,40 @@ body {
   gap: 12px;
 }
 
+/* ── Top Bar ── */
+
+#top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px;
+  flex-shrink: 0;
+}
+
+.app-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e6edf3;
+  letter-spacing: -0.01em;
+}
+
+.top-bar-right {
+  font-size: 12px;
+  color: #484f58;
+}
+
+.top-bar-right kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-family: monospace;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 3px;
+  color: #8b949e;
+  margin-right: 2px;
+}
+
 /* ── Main Row: Left column stacked, Output right ── */
 
 #main-row {
@@ -34,7 +68,7 @@ body {
   gap: 12px;
   width: 40%;
   min-width: 280px;
-  max-width: 480px;
+  max-width: 520px;
   min-height: 0;
 }
 
@@ -367,7 +401,7 @@ body {
 
 .onboarding-actions {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
 

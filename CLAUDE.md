@@ -89,14 +89,6 @@ open_palm()  → all five extended
 - Debounce: 1 second between dispatches
 - Confidence ring: 0.8s hold required before dispatch fires
 
-## Core PRD + Expansions
-
-- **Core PRD:** `gesture-dispatch-prd.md`
-- **Expansions:** `prd-expansion.md`
-- **p5.js visualization:** `p5-hand-visualization.md`
-- **Bishesh's scope:** `bishesh-detection-ui.md`
-- **Sam's scope:** `sam-ai-pipeline.md`
-
 ### Expansion Features (beyond MVP)
 
 1. **p5.js hand visualization** — stylized landmark skeleton replaces raw webcam feed (Bishesh)
