@@ -1,0 +1,37 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0d0d0d; color: #f0f0f0; font-family: monospace; height: 100vh; display: flex; flex-direction: column; }
+
+#app { display: flex; flex-direction: column; height: 100vh; }
+
+#top-bar { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px; }
+
+#camera-wrap { position: relative; width: 200px; height: 150px; }
+#camera, #landmark-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 6px; }
+#gesture-label {
+  position: absolute; bottom: 4px; left: 4px;
+  background: rgba(0,0,0,0.6); color: #fff;
+  font-size: 12px; padding: 2px 6px; border-radius: 4px;
+}
+
+#gesture-indicator {
+  font-size: 20px; font-weight: bold; color: #a3e635;
+  opacity: 0; transition: opacity 0.15s;
+}
+#gesture-indicator.flash {
+  animation: flash-in 0.8s ease-out forwards;
+}
+@keyframes flash-in {
+  0%   { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+#output-panel {
+  flex: 1; background: #111; border-top: 1px solid #222;
+  padding: 16px; overflow-y: auto; font-size: 14px;
+}
+
+#legend-bar {
+  display: flex; gap: 24px; justify-content: center;
+  padding: 10px; border-top: 1px solid #222;
+  font-size: 13px; color: #888;
+}
