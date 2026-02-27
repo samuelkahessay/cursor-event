@@ -19,7 +19,7 @@ body {
   gap: 12px;
 }
 
-/* ── Main Row: Camera left, Output right ── */
+/* ── Main Row: Left column stacked, Output right ── */
 
 #main-row {
   display: flex;
@@ -28,14 +28,21 @@ body {
   min-height: 0;
 }
 
+#left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 40%;
+  min-width: 280px;
+  max-width: 480px;
+  min-height: 0;
+}
+
 #camera-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  width: 40%;
-  min-width: 280px;
-  max-width: 480px;
 }
 
 #camera-wrap {
@@ -96,18 +103,17 @@ body {
   100% { opacity: 0; transform: scale(1); }
 }
 
-/* ── Right Column: stacked output + activity log ── */
+/* ── Right Column: output panel (full height) ── */
 
 #right-column {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
   min-width: 0;
   min-height: 0;
 }
 
-/* ── Output Panel (top right) ── */
+/* ── Output Panel (full right side) ── */
 
 #output-panel {
   flex: 1;
@@ -120,11 +126,23 @@ body {
   min-height: 0;
 }
 
-/* ── Activity Log (bottom right) ── */
+/* ── Code Snippet Panel (top-left, always visible) ── */
+
+#code-snippet-panel {
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 220px;
+  flex-shrink: 0;
+}
+
+/* ── Activity Log (bottom of left column) ── */
 
 #activity-log {
-  height: 180px;
-  min-height: 120px;
+  flex: 1;
+  min-height: 100px;
   background: #161b22;
   border: 1px solid #30363d;
   border-radius: 8px;
@@ -230,14 +248,12 @@ body {
   margin-top: 40%;
 }
 
-/* ── Onboarding Overlay ── */
+/* ── Onboarding (header + action cards inside output panel) ── */
 
 #onboarding {
   display: flex;
   flex-direction: column;
-  height: 100%;
   animation: fade-in 0.5s ease-out;
-  overflow-y: auto;
 }
 
 #onboarding.hidden {
@@ -280,8 +296,6 @@ body {
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 14px;
-  flex: 1;
-  min-height: 0;
   display: flex;
   flex-direction: column;
 }
