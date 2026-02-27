@@ -14,8 +14,8 @@ export function initHands(videoEl, onResults) {
 
   const camera = new Camera(videoEl, {
     onFrame: async () => { await hands.send({ image: videoEl }); },
-    width: 200,
-    height: 150,
+    width: 640,
+    height: 480,
   });
 
   camera.start();

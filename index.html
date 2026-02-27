@@ -8,18 +8,23 @@
 </head>
 <body>
   <div id="app">
-    <!-- Top row: camera feed + gesture indicator -->
-    <div id="top-bar">
-      <div id="camera-wrap">
-        <video id="camera" autoplay playsinline muted></video>
-        <canvas id="landmark-canvas"></canvas>
-        <div id="gesture-label"></div>
+    <!-- Main content: side-by-side layout -->
+    <div id="main-content">
+      <!-- Left column: camera feed + gesture indicator -->
+      <div id="left-column">
+        <div id="top-bar">
+          <div id="camera-wrap">
+            <video id="camera" autoplay playsinline muted></video>
+            <canvas id="landmark-canvas"></canvas>
+            <div id="gesture-label"></div>
+          </div>
+          <div id="gesture-indicator"></div>
+        </div>
       </div>
-      <div id="gesture-indicator"></div>
-    </div>
 
-    <!-- Output panel — streams Claude responses -->
-    <div id="output-panel"></div>
+      <!-- Right column: Output panel — streams Claude responses -->
+      <div id="output-panel"></div>
+    </div>
 
     <!-- Legend bar -->
     <div id="legend-bar">
