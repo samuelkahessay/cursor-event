@@ -1,15 +1,15 @@
-# GestureDispatch (SignalFire)
+# GestureDispatch
 
-AI-powered code snippets triggered by hand gestures. Select code, make a hand sign at your webcam, and the gesture dispatches a Claude API call with that code as context. The result streams into an output panel and auto-copies to clipboard.
+**Wave your hand at the webcam, get AI-powered code actions.** No typing, no buttons — just gestures.
 
-**Core loop:** Select code → Gesture → Claude API → Stream result → Clipboard
+Copy a code snippet, throw a hand sign, and an LLM streams back a fix, explanation, commit message, or test scaffold. Result auto-copies to your clipboard.
 
-## Demo
+## How It Works
 
-1. Copy a code snippet (or use the built-in demo code)
-2. Make a hand gesture at your webcam
-3. Watch the AI response stream in real-time
-4. Result auto-copies to your clipboard
+1. Copy a code snippet (or use the built-in demo)
+2. Hold a hand gesture at your webcam for 0.8s
+3. AI response streams in real-time
+4. Result auto-copies to clipboard
 
 ## Gestures
 
@@ -21,58 +21,25 @@ AI-powered code snippets triggered by hand gestures. Select code, make a hand si
 | `4` | ✌️ Peace | Scaffold tests |
 | `0` | ✋ Open palm | Abort stream |
 
-Gestures require a 0.8s hold before dispatch fires. Keyboard shortcuts are always available as a fallback.
+Keyboard shortcuts always work as fallback. Press `M` to mute sound cues.
 
 ## Tech Stack
 
-| Layer | Choice |
-|-------|--------|
-| Bundler | Vite |
-| Language | Vanilla JS |
-| Hand Detection | MediaPipe Hands (CDN) |
-| AI | Claude via OpenRouter (`anthropic/claude-sonnet-4`) |
-| Visualization | p5.js (CDN) — stylized hand landmark rendering |
-| UI | Single HTML page + CSS |
-
-## Project Structure
-
-```
-├── index.html              ← layout: camera left, output + activity log right
-├── src/
-│   ├── main.js             ← entry: camera init, MediaPipe, gesture loop, keyboard fallback
-│   ├── classifier.js       ← landmark → gesture classifier
-│   ├── dispatcher.js       ← dispatch(gesture, code) → Claude API → stream → clipboard
-│   ├── output-panel.js     ← streaming output DOM controller
-│   ├── activity-log.js     ← timestamped activity log (bottom-right panel)
-│   ├── api.js              ← OpenRouter SSE streaming
-│   ├── prompts.js          ← prompt templates, status messages, fallback data
-│   ├── handviz.js          ← p5.js hand skeleton, confidence ring, particles
-│   ├── sounds.js           ← Web Audio API tone generator
-│   ├── camera.js           ← webcam setup
-│   ├── mediapipe.js        ← MediaPipe Hands init
-│   ├── ui.js               ← gesture feedback UI
-│   └── styles.css          ← all styling
-├── api/
-│   └── chat.js             ← Vercel Edge Function (production API proxy)
-├── vite.config.js          ← dev server config + API proxy
-└── .env                    ← OPENROUTER_API_KEY (gitignored)
-```
+Vanilla JS — no frameworks, no TypeScript. **Vite** bundles it, **MediaPipe Hands** tracks your fingers, **p5.js** draws a stylized hand skeleton with a confidence ring and particle bursts, and **Gemini 2.5 Flash** (via OpenRouter) handles the AI. One HTML page, zero npm dependencies beyond Vite.
 
 ## Setup
 
 ```bash
 npm install
 cp .env.example .env       # add your OPENROUTER_API_KEY
-npm run dev                 # starts Vite dev server
+npm run dev
 ```
-
-## Layout
-
-- **Left:** Camera feed with p5.js hand visualization overlay (skeleton, confidence ring, particle bursts)
-- **Top right:** Code output panel — streams AI responses with syntax highlighting
-- **Bottom right:** Activity log — timestamped events for gestures, dispatches, clipboard copies, and errors
 
 ## Team
 
-- **Bishesh** — Detection & UI (camera, MediaPipe, gesture classifier, p5.js visualization, sound)
-- **Sam** — AI Pipeline & Output (dispatcher, Claude API streaming, output panel, clipboard)
+**Samuel Kahessay** — AI pipeline, streaming output, clipboard integration
+**Bishesh Khanal** — Hand detection, gesture classification, p5.js visualization, sound design
+
+---
+
+*Built at Cursor Meetup Calgary, February 2026*
