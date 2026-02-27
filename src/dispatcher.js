@@ -2,6 +2,7 @@ import { PROMPT_TEMPLATES, STATUS_MESSAGES, CACHED_FALLBACK } from './prompts.js
 import { streamChat } from './api.js';
 import { showStatus, clearPanel, appendText, showConfirmation } from './output-panel.js';
 import { playTone } from './sounds.js';
+import { logActivity } from './activity-log.js';
 
 let activeController = null;
 
@@ -17,6 +18,7 @@ export function dispatch(gestureName, code = '') {
     if (activeController) {
       activeController.abort();
       activeController = null;
+      logActivity('✋', 'Stream aborted');
     }
     showStatus(STATUS_MESSAGES.stop);
     playTone('abort');
@@ -41,6 +43,9 @@ export function dispatch(gestureName, code = '') {
   const prompt = template.replace('{code}', code);
   showStatus(STATUS_MESSAGES[gestureName]);
 
+  const gestureIcons = { fix: '👎', explain: '☝️', commit: '✊', test: '✌️' };
+  logActivity(gestureIcons[gestureName] || '🤚', `Dispatching "${gestureName}"`);
+
   // ── Stream and pipe to output panel ──
   streamChat(prompt, signal, (chunk) => {
     appendText(chunk);
@@ -49,6 +54,8 @@ export function dispatch(gestureName, code = '') {
       // Auto-copy result to clipboard
       navigator.clipboard.writeText(fullText).then(() => {
         showConfirmation('✓ Copied to clipboard');
+        playTone('confirm');
+        logActivity('✓', 'Response copied to clipboard', 'success');
       });
     })
     .catch((err) => {
@@ -56,16 +63,20 @@ export function dispatch(gestureName, code = '') {
 
       // Network / API failure → use cached fallback
       console.warn('Stream failed, using cached fallback:', err.message);
+      logActivity('⚠', `Stream failed: ${err.message}`, 'error');
       const fallback = CACHED_FALLBACK[gestureName];
       if (fallback) {
         clearPanel();
         showStatus(STATUS_MESSAGES[gestureName]);
         appendText(fallback);
+        logActivity('↩', 'Using cached fallback');
         navigator.clipboard.writeText(fallback).then(() => {
           showConfirmation('✓ Copied to clipboard (cached fallback)');
+          playTone('confirm');
         });
       } else {
         showStatus(`Error: ${err.message}`);
+        logActivity('✗', `Error: ${err.message}`, 'error');
       }
     });
 }

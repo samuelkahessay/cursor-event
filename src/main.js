@@ -8,6 +8,7 @@ import { FALLBACK_CODE } from './prompts.js';
 import { createHandSketch } from './handviz.js';
 import { showStatus } from './output-panel.js';
 import { playTone, toggleMute } from './sounds.js';
+import { logActivity } from './activity-log.js';
 
 // ── DOM refs ──
 
@@ -88,6 +89,7 @@ function onMediaPipeResults(results) {
     handViz?.triggerBurst(gesture);
     showGestureFeedback(gesture);
     playTone('fire');
+    logActivity('🖐', `Gesture confirmed: ${gesture}`);
     fireGestureDispatch(gesture);
   }
 }
@@ -119,15 +121,19 @@ function fireGestureDispatch(gestureName) {
 
 // ── Camera + MediaPipe startup ──
 
+logActivity('🚀', 'GestureDispatch ready');
+
 startCamera(video).then(() => {
   // Hide video — MediaPipe still reads from it, user sees p5 canvas
   if (handViz) {
     video.style.display = 'none';
   }
   initHands(video, onMediaPipeResults);
+  logActivity('📷', 'Camera active');
 }).catch((err) => {
   console.warn('Camera access failed:', err.message);
   showStatus('Camera access denied — use keyboard shortcuts (1-4, 0)');
+  logActivity('📷', `Camera failed: ${err.message}`, 'error');
 });
 
 // ── Keyboard shortcuts (always available — demo safety net) ──
@@ -159,5 +165,6 @@ document.addEventListener('keydown', async (e) => {
 
   showGestureFeedback(gesture);
   playTone('fire');
+  logActivity('⌨', `Key [${e.key}] → ${gesture}`);
   dispatch(gesture, code);
 });

@@ -7,7 +7,28 @@
  *   .confirmation – clipboard / abort confirmation
  */
 
+import { FALLBACK_CODE } from './prompts.js';
+
 const panel = document.getElementById('output-panel');
+
+// ── Populate demo snippet on load ──
+
+const snippetEl = document.getElementById('demo-snippet');
+if (snippetEl) snippetEl.textContent = FALLBACK_CODE;
+
+const copyBtn = document.getElementById('copy-demo-btn');
+if (copyBtn) {
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(FALLBACK_CODE).then(() => {
+      copyBtn.textContent = 'Copied!';
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy';
+        copyBtn.classList.remove('copied');
+      }, 1500);
+    });
+  });
+}
 
 // ── Ensure inner elements exist ──
 

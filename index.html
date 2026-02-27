@@ -19,46 +19,55 @@
         <div id="gesture-indicator"></div>
       </div>
 
-      <!-- Right: output / clipboard panel -->
-      <div id="output-panel">
-        <div id="onboarding">
-          <div class="onboarding-header">
-            <div class="onboarding-icon">👋</div>
-            <div>
-              <h2>Gesture to dispatch</h2>
-              <p class="onboarding-sub">Copy the code below, then make a hand sign</p>
+      <!-- Right: stacked panels -->
+      <div id="right-column">
+        <!-- Top right: code output -->
+        <div id="output-panel">
+          <div id="onboarding">
+            <div class="onboarding-header">
+              <div class="onboarding-icon">👋</div>
+              <div>
+                <h2>Gesture to dispatch</h2>
+                <p class="onboarding-sub">Copy the code below, then make a hand sign</p>
+              </div>
             </div>
-          </div>
 
-          <div class="demo-code-block">
-            <div class="demo-code-titlebar">
-              <span class="demo-dot red"></span>
-              <span class="demo-dot yellow"></span>
-              <span class="demo-dot green"></span>
-              <span class="demo-filename">user_service.py</span>
-              <button class="demo-copy-btn" id="copy-demo-btn">Copy</button>
+            <div class="demo-code-block">
+              <div class="demo-code-titlebar">
+                <span class="demo-dot red"></span>
+                <span class="demo-dot yellow"></span>
+                <span class="demo-dot green"></span>
+                <span class="demo-filename">user_service.py</span>
+                <button class="demo-copy-btn" id="copy-demo-btn">Copy</button>
+              </div>
+              <pre class="demo-snippet" id="demo-snippet"></pre>
             </div>
-            <pre class="demo-snippet" id="demo-snippet"></pre>
-          </div>
 
-          <div class="onboarding-actions">
-            <div class="onboarding-action">
-              <kbd>1</kbd><span class="action-emoji">👎</span>
-              <div><strong>Fix</strong><span class="action-desc">Find &amp; fix bugs</span></div>
-            </div>
-            <div class="onboarding-action">
-              <kbd>2</kbd><span class="action-emoji">☝️</span>
-              <div><strong>Explain</strong><span class="action-desc">3-bullet summary</span></div>
-            </div>
-            <div class="onboarding-action">
-              <kbd>3</kbd><span class="action-emoji">✊</span>
-              <div><strong>Commit</strong><span class="action-desc">Git message</span></div>
-            </div>
-            <div class="onboarding-action">
-              <kbd>4</kbd><span class="action-emoji">✌️</span>
-              <div><strong>Test</strong><span class="action-desc">Scaffold tests</span></div>
+            <div class="onboarding-actions">
+              <div class="onboarding-action">
+                <kbd>1</kbd><span class="action-emoji">👎</span>
+                <div><strong>Fix</strong><span class="action-desc">Find &amp; fix bugs</span></div>
+              </div>
+              <div class="onboarding-action">
+                <kbd>2</kbd><span class="action-emoji">☝️</span>
+                <div><strong>Explain</strong><span class="action-desc">3-bullet summary</span></div>
+              </div>
+              <div class="onboarding-action">
+                <kbd>3</kbd><span class="action-emoji">✊</span>
+                <div><strong>Commit</strong><span class="action-desc">Git message</span></div>
+              </div>
+              <div class="onboarding-action">
+                <kbd>4</kbd><span class="action-emoji">✌️</span>
+                <div><strong>Test</strong><span class="action-desc">Scaffold tests</span></div>
+              </div>
             </div>
           </div>
+        </div>
+
+        <!-- Bottom right: activity log -->
+        <div id="activity-log">
+          <div class="activity-log-header">Activity</div>
+          <div id="activity-log-entries"></div>
         </div>
       </div>
     </div>
