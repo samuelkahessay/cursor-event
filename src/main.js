@@ -5,6 +5,10 @@ import { processFrame, onGestureDetected } from './gestures.js';
 import { showGestureFeedback } from './ui.js';
 import { dispatch } from './dispatcher.js';
 import { FALLBACK_CODE } from './prompts.js';
+import { showDemoState } from './output-panel.js';
+
+// ── Show demo snippet on load ──
+showDemoState();
 
 // ── Camera + gesture detection (Bishesh) ──
 

@@ -120,6 +120,27 @@ body {
   margin-top: 40%;
 }
 
+/* ── Demo State ── */
+
+.demo-hint {
+  font-size: 13px;
+  color: #8b949e;
+  margin-bottom: 12px;
+}
+
+.demo-snippet {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 14px 16px;
+  color: #e6edf3;
+  cursor: text;
+  user-select: text;
+}
+
 /* ── Legend Bar ── */
 
 #legend-bar {

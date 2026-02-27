@@ -7,6 +7,8 @@
  *   .confirmation – clipboard / abort confirmation
  */
 
+import { FALLBACK_CODE } from './prompts.js';
+
 const panel = document.getElementById('output-panel');
 
 // ── Ensure inner elements exist ──
@@ -19,6 +21,14 @@ function getOrCreate(className, tag = 'div') {
     panel.appendChild(el);
   }
   return el;
+}
+
+/** Show the demo code snippet on initial load so it's ready to select + copy. */
+export function showDemoState() {
+  panel.innerHTML = `
+    <div class="demo-hint">Select the code below, copy it, then press a key to dispatch →</div>
+    <pre class="demo-snippet">${FALLBACK_CODE}</pre>
+  `;
 }
 
 /** Show a status message at the top of the panel (e.g. "▶ Fixing bug..."). */
