@@ -14,7 +14,10 @@ Own everything from **camera → recognized gesture event** plus the **visual sh
 ## Shared Context
 
 ### The One-Liner
-A developer tool that lets you trigger AI-powered coding workflows — unit tests, explanations, commits, scaffolding — using hand signs in front of your webcam.
+> "Code snippets — but AI-powered and triggered by hand signs. Same muscle memory, infinite context-awareness."
+
+### The Analogy
+GestureDispatch maps gestures to AI workflows the same way snippet shortcuts map to boilerplate. Finite, learnable, fast — but context-aware.
 
 ### Technical Stack
 
@@ -52,16 +55,16 @@ A developer tool that lets you trigger AI-powered coding workflows — unit test
 #### Gesture Rules (MediaPipe 21-point landmarks)
 
 ```
-Finger extended = tip y-position < pip y-position (tip is higher than knuckle)
+Finger extended = tip y-position < pip y-position (tip higher than knuckle)
 
-peace()     → index_extended AND middle_extended AND NOT ring AND NOT pinky
-thumbs_up() → thumb_extended AND NOT index AND NOT middle AND NOT ring AND NOT pinky
-hang_loose()→ thumb_extended AND NOT index AND NOT middle AND NOT ring AND pinky_extended
-rock_on()   → index_extended AND NOT middle AND NOT ring AND pinky_extended
-open_palm() → all five fingers extended
+peace()      → index_extended AND middle_extended AND NOT ring AND NOT pinky
+thumbs_up()  → thumb_extended AND NOT index AND NOT middle AND NOT ring AND NOT pinky
+hang_loose() → thumb_extended AND pinky_extended AND NOT index AND NOT middle AND NOT ring
+rock_on()    → index_extended AND pinky_extended AND NOT middle AND NOT ring
+open_palm()  → all five fingers extended
 ```
 
-**Deliverable:** `✌️ → "peace"` logged reliably.
+**Deliverable:** `✌️ → "fix"` logged reliably.
 
 ---
 
@@ -69,20 +72,21 @@ open_palm() → all five fingers extended
 **Goal:** The app looks like the demo mockup and gives visual feedback.
 
 - Build the page layout per the mockup below
-- Add gesture name label overlay on camera feed (bottom left, small)
+- Add gesture name label overlay on camera feed
 - Add "gesture recognized" flash animation when a gesture fires
-- Build the gesture legend bar at the bottom: `✌️ Fix  👍 Explain  🤙 Commit  🤘 Scaffold  ✋ Stop`
+- Build the gesture legend bar at the bottom: `✌️ fix  👍 explain  🤙 commit  🤘 test  ✋ stop`
 - Create the output panel container (dark background, fixed position) — Sam will fill it with streaming content
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  [Camera Feed — top left, small]     [Gesture: ✌️ FIX]  │
+│  [Camera Feed]                        [✌️  FIX FIRED]   │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │  [Output Panel — Sam owns the content]                  │
 │                                                         │
+│  ✓ Copied to clipboard                                  │
 │  ─────────────────────────────────────────────────────  │
-│  ✌️ Fix  👍 Explain  🤙 Commit  🤘 Scaffold  ✋ Stop    │
+│  ✌️ fix  👍 explain  🤙 commit  🤘 test  ✋ stop         │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -125,13 +129,13 @@ function onGesture(gestureName) {
 
 ## Gesture Vocabulary (Reference)
 
-| Gesture | Sign | Action |
-|---------|------|--------|
-| ✌️ Peace | Index + middle up | Fix bug |
-| 👍 Thumbs up | Thumb extended up | Explain code |
-| 🤙 Hang loose | Thumb + pinky out | Generate commit message |
-| 🤘 Rock on | Index + pinky up | Scaffold test file |
-| ✋ Open palm | All fingers up | STOP — abort stream |
+| Gesture | Sign | Snippet Equivalent | Action |
+|---------|------|--------------------|--------|
+| ✌️ Peace | Index + middle up | `fixbug` | Fix bug |
+| 👍 Thumbs up | Thumb extended | `explain` | Explain code |
+| 🤙 Hang loose | Thumb + pinky out | `cmsg` | Generate commit message |
+| 🤘 Rock on | Index + pinky up | `gentest` | Scaffold test file |
+| ✋ Open palm | All fingers up | `ESC` | STOP — abort stream |
 
 ---
 
@@ -139,9 +143,8 @@ function onGesture(gestureName) {
 
 If MVP is solid and time permits:
 
-- **Stretch 2 — Gesture Confidence Visualizer:** Show a "charging ring" around the gesture icon that fills over 1 second before dispatch. Prevents accidental fires, looks great in demo.
-- **Stretch 3 — Custom Gesture Recorder:** Let user record their own gesture → action mappings. Show landmark visualization while recording. Store in localStorage.
-- **Stretch 4 — Two-Hand Modifier System:** Non-dominant hand = "modifier." ✋ (left) + ✌️ (right) = "refactor" instead of "fix." Doubles vocabulary.
+- **Stretch 1 — Gesture Confidence Ring:** Show a circular fill around the gesture icon that completes over 0.8 seconds before dispatch. Prevents accidental fires, looks great in demo. ~30 minutes.
+- **Stretch 4 — Two-Hand Modifier System:** Non-dominant hand = modifier key. ✋ (left) + ✌️ (right) = "refactor" instead of "fix." Doubles vocabulary. ~1.5 hours.
 
 ---
 
@@ -149,7 +152,7 @@ If MVP is solid and time permits:
 
 | Risk | Mitigation |
 |------|------------|
-| Lighting kills detection | Test in demo room early, have a lamp ready |
+| Lighting kills detection | Test in demo room early, bring a lamp |
 | Gesture misclassification | 0.85 confidence threshold + 1s debounce |
 
 ---

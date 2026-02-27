@@ -7,22 +7,26 @@
 
 ## Your Mission
 
-Own everything from **gesture event → Claude API → rendered output**. Your deliverable is a module where calling `dispatch("peace", codeString)` streams Claude's response into a styled output panel.
+Own everything from **gesture event → Claude API → rendered output → clipboard**. Your deliverable is a module where calling `dispatch("fix", codeString)` streams Claude's response into a styled output panel and auto-copies the result to clipboard.
 
 ---
 
 ## Shared Context
 
 ### The One-Liner
-A developer tool that lets you trigger AI-powered coding workflows — unit tests, explanations, commits, scaffolding — using hand signs in front of your webcam.
+> "Code snippets — but AI-powered and triggered by hand signs. Same muscle memory, infinite context-awareness."
+
+### The Analogy
+GestureDispatch maps gestures to AI workflows the same way snippet shortcuts map to boilerplate. Finite, learnable, fast — but context-aware. The full loop: select code → gesture → AI output → clipboard → paste. Nothing left hanging.
 
 ### Technical Stack
 
 | Layer | Choice | Why |
 |-------|--------|-----|
 | Framework | Vite + Vanilla JS | Zero config, fast, no overhead |
-| AI | Claude API (claude-sonnet-4) | Fastest good output, streaming support |
-| Context | Clipboard API | Dead simple, requires one user action |
+| AI | Claude API (claude-sonnet-4) | Fastest output, streaming support |
+| Context | Clipboard API | Dead simple, one user action |
+| Output handoff | Auto-copy to clipboard | Closes the loop — result is paste-ready |
 
 ---
 
@@ -37,7 +41,7 @@ A developer tool that lets you trigger AI-powered coding workflows — unit test
 - Map gesture name → prompt template, inject `{code}` from clipboard
 - Test with a button or keyboard shortcut that simulates a gesture event
 
-**Deliverable:** `{ gesture: "peace", prompt: "Here is a Python function...", code: "def buggy_fn()..." }` payload assembled.
+**Deliverable:** `{ gesture: "fix", prompt: "Here is a function...", code: "def buggy_fn()..." }` payload assembled.
 
 ---
 
@@ -51,6 +55,7 @@ A developer tool that lets you trigger AI-powered coding workflows — unit test
   - Call Claude API with `stream: true`
   - Return a readable stream / fire callbacks with chunks
 - Implement abort logic: `dispatch('open_palm')` → cancel active stream via `AbortController`
+- **Auto-copy completed result to clipboard** using `navigator.clipboard.writeText()`
 - Handle errors gracefully (network failure, API errors, empty clipboard)
 
 ```js
@@ -58,7 +63,7 @@ A developer tool that lets you trigger AI-powered coding workflows — unit test
 export function dispatch(gestureName, code) { ... }
 ```
 
-**Deliverable:** `dispatch("peace", code)` → Claude response chunks arriving.
+**Deliverable:** `dispatch("fix", code)` → Claude response chunks arriving → result copied to clipboard.
 
 ---
 
@@ -67,9 +72,10 @@ export function dispatch(gestureName, code) { ... }
 
 - Build the output panel inside the container Bishesh creates (dark bg, fixed position)
 - Render streaming text chunk-by-chunk as it arrives
-- Add status header: `"▶ Fixing bug in selected code..."` with gesture-specific messages
+- Add status header with gesture-specific messages (see table below)
 - Style code blocks in the response (monospace, syntax-colored if easy)
 - Show a loading indicator while waiting for first chunk
+- **Show "✓ Copied to clipboard" confirmation when stream completes**
 - Clear panel on new gesture dispatch
 
 **Status messages per gesture:**
@@ -81,7 +87,7 @@ export function dispatch(gestureName, code) { ... }
 | 🤘 Rock on | "▶ Scaffolding test file..." |
 | ✋ Open palm | "⏹ Stream aborted." |
 
-**Deliverable:** Streaming Claude output renders cleanly in the panel.
+**Deliverable:** Streaming Claude output renders cleanly in the panel with clipboard confirmation.
 
 ---
 
@@ -123,7 +129,11 @@ export function dispatch(gestureName, code = '') {
   activeController = new AbortController();
 
   const prompt = PROMPT_TEMPLATES[gestureName].replace('{code}', code);
-  streamClaude(prompt, activeController.signal);
+  streamClaude(prompt, activeController.signal)
+    .then(fullResponse => {
+      navigator.clipboard.writeText(fullResponse);
+      showStatus('✓ Copied to clipboard');
+    });
 }
 ```
 
@@ -131,12 +141,12 @@ export function dispatch(gestureName, code = '') {
 
 ## Prompt Templates
 
-| Gesture | Prompt |
-|---------|--------|
-| ✌️ Peace (Fix) | `"Here is a Python function with a bug. Identify and fix it, return only the corrected code with a one-line comment explaining the fix: {code}"` |
-| 👍 Thumbs up (Explain) | `"Explain what this code does in 3 bullet points, written for a developer: {code}"` |
-| 🤙 Hang loose (Commit) | `"Write a concise, conventional git commit message for the following change: {code}"` |
-| 🤘 Rock on (Test) | `"Generate a complete pytest test file for this function. Include happy path, edge cases, and error cases: {code}"` |
+| Gesture | Snippet Equiv. | Prompt |
+|---------|---------------|--------|
+| ✌️ Peace (Fix) | `fixbug` | `"Here is a function with a bug. Identify and fix it. Return only the corrected code with a one-line comment explaining the fix: {code}"` |
+| 👍 Thumbs up (Explain) | `explain` | `"Explain what this code does in 3 bullet points, written for a developer: {code}"` |
+| 🤙 Hang loose (Commit) | `cmsg` | `"Write a concise, conventional git commit message for the following change: {code}"` |
+| 🤘 Rock on (Test) | `gentest` | `"Generate a complete pytest test file for this function. Include happy path, edge cases, and error cases: {code}"` |
 
 ---
 
@@ -144,9 +154,9 @@ export function dispatch(gestureName, code = '') {
 
 If MVP is solid and time permits:
 
-- **Stretch 5 — Voice Fallback Layer:** Add Web Speech API so the user can say "fix", "explain", "commit" as a fallback input. Same dispatcher, two input modalities. Great for accessibility pitch.
-- **Stretch 6 — Agent Chaining:** ✌️ fix → auto-pipes output into 🤘 scaffold test → auto-commits with 🤙. A gesture-triggered pipeline. The "wow" demo moment.
-- **Stretch 1 — VS Code Extension:** Inject context directly from active editor selection instead of clipboard. Eliminates "select first" friction.
+- **Stretch 2 — VS Code Extension Integration:** Inject context directly from active editor selection instead of clipboard. Also insert result directly below the selection. Eliminates "select first" friction on both ends. ~45 minutes.
+- **Stretch 3 — Named Gesture Profiles ("Snippet Packs"):** Different gesture sets for different contexts — "code review" pack, "writing" pack, "data science" pack. Same 5 shapes, different dispatches. ~1 hour.
+- **Stretch 5 — Agent Chaining:** ✌️ fix → auto-pipes output into 🤘 scaffold test → auto-commits with 🤙. A gesture-triggered pipeline. The "wow" demo moment. ~2 hours.
 
 ---
 
@@ -155,8 +165,9 @@ If MVP is solid and time permits:
 | Risk | Mitigation |
 |------|------------|
 | Clipboard permission denied | Hardcoded demo code string as fallback |
-| Claude API latency | Stream output so it feels fast immediately |
+| Claude API latency | Streaming makes it feel instant |
 | Network failure during demo | Cache a fallback response for the demo function |
+| Judges ask "then what?" | Auto-clipboard copy answers this immediately |
 
 ---
 
@@ -164,6 +175,8 @@ If MVP is solid and time permits:
 
 - [ ] `dispatch(gestureName, code)` calls Claude with correct prompt
 - [ ] Response streams visibly into the panel within 2 seconds
+- [ ] Result is auto-copied to clipboard when stream completes
+- [ ] "✓ Copied to clipboard" confirmation appears
 - [ ] Open palm aborts the active stream
 - [ ] Output panel renders code blocks cleanly
 - [ ] Cached fallback works if network fails
